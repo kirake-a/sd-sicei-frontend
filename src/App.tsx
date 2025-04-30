@@ -1,4 +1,4 @@
-import { GitHubBanner, Refine } from "@refinedev/core";
+import { Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
@@ -32,11 +32,16 @@ import {
   CategoryList,
   CategoryShow,
 } from "./pages/categories";
+import {
+  StudentCreate,
+  StudentEdit,
+  StudentList,
+  StudentShow
+} from "./pages/students"
 
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <CssBaseline />
@@ -64,6 +69,16 @@ function App() {
                     create: "/categories/create",
                     edit: "/categories/edit/:id",
                     show: "/categories/show/:id",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "students",
+                    list: "/students",
+                    create: "/students/create",
+                    edit: "/students/edit/:id",
+                    show: "/students/show/:id",
                     meta: {
                       canDelete: true,
                     },
@@ -99,6 +114,12 @@ function App() {
                       <Route path="create" element={<CategoryCreate />} />
                       <Route path="edit/:id" element={<CategoryEdit />} />
                       <Route path="show/:id" element={<CategoryShow />} />
+                    </Route>
+                    <Route path="/students">
+                      <Route index element={<StudentList />} />
+                      <Route path="create" element={<StudentCreate />} />
+                      <Route path="edit/:id" element={<StudentEdit />} />
+                      <Route path="show/:id" element={<StudentShow />} />
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>

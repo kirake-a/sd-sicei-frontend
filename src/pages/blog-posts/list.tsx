@@ -10,6 +10,7 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import React from "react";
+import { CustomDeleteButton } from "../../components/buttons/CustomDeleteButton";
 
 export const BlogPostList = () => {
   const { dataGridProps } = useDataGrid({});
@@ -24,6 +25,10 @@ export const BlogPostList = () => {
       enabled: !!dataGridProps?.rows,
     },
   });
+
+  const consoleDelete = async (id: string) => {
+    console.log("Delete", id);
+  }
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -108,6 +113,7 @@ export const BlogPostList = () => {
               <EditButton hideText recordItemId={row.id} />
               <ShowButton hideText recordItemId={row.id} />
               <DeleteButton hideText recordItemId={row.id} />
+              <CustomDeleteButton id={row.id} category={"Student"} onAction={consoleDelete} />
             </>
           );
         },
