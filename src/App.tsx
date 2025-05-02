@@ -1,7 +1,7 @@
 import { Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
-import { customDataProvider } from "./data-provider";
+import { customDataProvider } from "./api/data-provider";
 
 import PersonIcon from '@mui/icons-material/Person';
 import SubjectIcon from '@mui/icons-material/Subject';
