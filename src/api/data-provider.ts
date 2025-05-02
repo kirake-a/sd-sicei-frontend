@@ -6,9 +6,22 @@ import { errorHandler } from "../utils/errorHandler";
 const API_URL = import.meta.env.VITE_SICEI_API_ORIGIN;
 
 export const customDataProvider: DataProvider = {
-  getList: async ({ resource }) => {
+  getList: async ({ resource, pagination, sorters }) => {
     try{
-      const response = await axios.get(`${API_URL}/${resource}`);
+      const queryParams = new URLSearchParams();
+
+      if (pagination) {
+        queryParams.append("current", pagination.current?.toString() ?? "1");
+        queryParams.append("pageSize", pagination.pageSize?.toString() ?? "25");
+      }
+
+      if (sorters && sorters.length > 0) {
+        queryParams.append("sorters[0][field]", sorters[0].field);
+        queryParams.append("sorters[0][order]", sorters[0].order);
+      }
+
+      const response = await axios.get(`${API_URL}/${resource}?${queryParams.toString()}`);
+      
       return {
         data: response.data,
         total: response.data.length,
@@ -25,7 +38,6 @@ export const customDataProvider: DataProvider = {
     } catch (error) {
       throw errorHandler(error, `getOne for ${resource} with id ${id}`);
     }
-      
   },
 
   create: async ({ resource, variables }) => {
