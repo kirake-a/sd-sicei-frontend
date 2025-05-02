@@ -1,33 +1,18 @@
+import { Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
   DeleteButton,
   EditButton,
   List,
   ShowButton,
+  useDataGrid,
 } from "@refinedev/mui";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Student } from "../../interfaces/student_interface";
-import { getAllStudents } from "../../api/api_students";
 
 export const StudentList = () => {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchStudents = async () => {
-    try {
-      const data = await getAllStudents();
-      setStudents(data);
-    } catch (error) {
-      console.error("Error fetching students:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
+  const { dataGridProps } = useDataGrid<Student>();
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -60,6 +45,18 @@ export const StudentList = () => {
         headerName: "Email",
         minWidth: 200,
         display: "flex",
+        renderCell: function render({ value }) {
+          return (
+            <Typography
+              component="p"
+              whiteSpace="pre"
+              overflow="hidden"
+              textOverflow="ellipsis"
+            >
+              {value ?? "-"}
+            </Typography>
+          )
+        }
       },
       {
         field: "actions",
@@ -74,7 +71,11 @@ export const StudentList = () => {
             <>
               <EditButton hideText recordItemId={row.id} />
               <ShowButton hideText recordItemId={row.id} />
-              <DeleteButton hideText recordItemId={row.id} />
+              <DeleteButton
+                hideText
+                recordItemId={row.id}
+                confirmTitle={`Are you sure you want to delete the student: ${row.name} ${row.lastname}?`}
+              />
             </>
           );
         },
@@ -86,9 +87,8 @@ export const StudentList = () => {
   return (
     <List>
       <DataGrid
-        rows={students}
+        {...dataGridProps}
         columns={columns}
-        loading={loading}
         getRowId={(row) => row.id}
       />
     </List>
