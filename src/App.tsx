@@ -34,7 +34,10 @@ import {
   StudentShow
 } from "./pages/students"
 
+const StickyHeader = () => <Header sticky />;
+
 function App() {
+
   return (
     <BrowserRouter>
       <RefineKbarProvider>
@@ -144,7 +147,7 @@ function App() {
                 <Routes>
                   <Route
                     element={
-                      <ThemedLayoutV2 Header={() => <Header sticky />}>
+                      <ThemedLayoutV2 Header={StickyHeader}>
                         <Outlet />
                       </ThemedLayoutV2>
                     }
