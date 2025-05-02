@@ -1,82 +1,54 @@
-import { Box, TextField, Button } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { Create } from "@refinedev/mui";
-import { useForm } from "react-hook-form";
-import { useNotification } from "@refinedev/core";
+import { useForm } from "@refinedev/react-hook-form";
 
-import { createStudent } from "../../api/api_students";
+import { Student } from "../../interfaces/student_interface";
 
-import { useNavigate } from "react-router-dom";
-
-type FormValues = {
-  name: string;
-  lastname: string;
-  email: string;
-  semester: number;
-}
+type FormValues = Omit<Student, "id">;
 
 export const StudentCreate = () => {
-  const navigate = useNavigate();
-  const { open } = useNotification();
 
   const {
+    saveButtonProps,
     register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormValues>();
-
-  const onSubmit = async (data: FormValues) => {
-    try {
-      await createStudent(data);
-      open?.({
-        type: "success",
-        message: "Student created successfully",
-        description: "The student has been created successfully.",
-        key: "student-create-success",
-        undoableTimeout: 1000,
-      });
-      navigate("/students");
-    } catch (error) {
-      console.error("Error creating student:", error);
-      open?.({
-        type: "error",
-        message: "Error creating student",
-        description: "There was an error creating the student.",
-        key: "student-create-error",
-        undoableTimeout: 1000
-      });
-    }
-  }
+    formState: { errors },
+    refineCore: { formLoading },
+  } = useForm<FormValues>({
+    refineCoreProps: {
+      resource: "students",
+      action: "create",
+    },
+  })
 
   return (
-    <Create isLoading={isSubmitting} saveButtonProps={{ style: { display: "none" } }}>
+    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
       <Box
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
         <TextField
-          {...register("name", {
-            required: "This field is required",
-          })}
+          {...register("name", { required: "This field is required" })}
           error={!!errors.name}
-          helperText={errors.name?.message}
+          helperText={typeof errors.name?.message === "string" ? errors.name.message : ""}
           margin="normal"
           fullWidth
-          type="text"
-          label={"Name"}
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          label="Name"
           name="name"
         />
         <TextField
-          {...register("lastname", {
-            required: "This field is required",
-          })}
+          {...register("lastname", { required: "This field is required" })}
           error={!!errors.lastname}
-          helperText={errors.lastname?.message}
+          helperText={typeof errors.lastname?.message === "string" ? errors.lastname.message : ""}
           margin="normal"
           fullWidth
-          type="text"
-          label={"Lastname"}
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          label="Lastname"
           name="lastname"
         />
         <TextField
@@ -88,33 +60,28 @@ export const StudentCreate = () => {
             },
           })}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={typeof errors.email?.message === "string" ? errors.email.message : ""}
           margin="normal"
           fullWidth
-          type="email"
-          label={"Email"}
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          label="Email"
           name="email"
         />
         <TextField
-          {...register("semester", {
-            required: "This field is required",
-          })}
+          {...register("semester", { required: "This field is required" })}
           error={!!errors.semester}
-          helperText={errors.semester?.message}
+          helperText={typeof errors.semester?.message === "string" ? errors.semester.message : ""}
           margin="normal"
           fullWidth
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
           type="number"
-          label={"Semester"}
+          label="Semester"
           name="semester"
         />
-        <Button 
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt:2, alignSelf: "flex-end" }}
-        >
-          Create Student
-        </ Button>
       </Box>
     </Create>
   );
