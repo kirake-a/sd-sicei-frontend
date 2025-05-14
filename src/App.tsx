@@ -33,6 +33,12 @@ import {
   StudentList,
   StudentShow
 } from "./pages/students"
+import {
+  SubjectCreate,
+  SubjectEdit,
+  SubjectList,
+  SubjectShow
+} from "./pages/subjects"
 
 const StickyHeader = () => <Header sticky />;
 
@@ -162,8 +168,17 @@ function App() {
                       <Route path="edit/:id" element={<StudentEdit />} />
                       <Route path="show/:id" element={<StudentShow />} />
                     </Route>
+
+                    <Route path="/subjects">
+                      <Route index element={<SubjectList />} />
+                      <Route path="create" element={<SubjectCreate />} />
+                      <Route path="edit/:id" element={<SubjectEdit />} />
+                      <Route path="show/:id" element={<SubjectShow />} />
+                    </Route>
+
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
+                  
                 </Routes>
 
                 <RefineKbar />
