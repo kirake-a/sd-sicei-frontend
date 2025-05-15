@@ -1,10 +1,10 @@
 import { Stack, Typography } from "@mui/material";
 import { useShow } from "@refinedev/core";
 import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
-import { Student } from "../../interfaces/student_interface";
+import { Subject } from "../../interfaces/subject_interface";
 
-export const StudentShow = () => {
-  const { query } = useShow<Student>();
+export const SubjectShow = () => {
+  const { query } = useShow<Subject>();
 
   const { data, isLoading } = query;
   const record = data?.data;
@@ -18,14 +18,19 @@ export const StudentShow = () => {
         <TextField value={record?.id} />
 
         <Typography variant="body1" fontWeight="bold">
-          {"Full Name"}
+          {"Name"}
         </Typography>
-        <TextField value={record?.name + " " + record?.lastname} />
+        <TextField value={record?.name} />
 
         <Typography variant="body1" fontWeight="bold">
-          {"Email"}
+          {"Description"}
         </Typography>
-        <TextField value={record?.email} />
+        <TextField value={record?.description} />
+
+        <Typography variant="body1" fontWeight="bold">
+          {"Credits"}
+        </Typography>
+        <TextField value={record?.credits} />
 
         <Typography variant="body1" fontWeight="bold">
           {"Semester"}
