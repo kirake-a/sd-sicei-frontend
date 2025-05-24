@@ -18,7 +18,7 @@ export const StudentGradesEdit = () => {
     refineCoreProps: {
       action: "edit",
       id: id,
-      resource: "students",
+      resource: "grades-students",
     },
   });
 

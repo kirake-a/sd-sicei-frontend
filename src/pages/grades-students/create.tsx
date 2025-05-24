@@ -15,7 +15,7 @@ export const StudentGradesCreate = () => {
     refineCore: { formLoading },
   } = useForm<FormValues>({
     refineCoreProps: {
-      resource: "students",
+      resource: "grades-students",
       action: "create",
     },
   })

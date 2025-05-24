@@ -53,7 +53,7 @@ export const resources: IResourceItem[] = [
     },
     {
         name: "grades-subjects",
-        list: "grades/subjects",
+        list: "/grades/subjects",
         create: "/grades/subjects/create",
         edit: "/grades/subjects/edit/:id",
         show: "/grades/subjects/show/:id",
