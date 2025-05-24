@@ -5,6 +5,13 @@ import { errorHandler } from "../utils/errorHandler";
 
 const API_URL = import.meta.env.VITE_SICEI_API_ORIGIN;
 
+const resourceToAPIPath: Record<string, string> = {
+  "grades-students": "grades/students",
+  "grades-subjects": "grades/subjects",
+  "reports-students": "reports/students",
+  "reports-subjects": "reports/subjects",
+}
+
 export const customDataProvider: DataProvider = {
   getList: async ({ resource, pagination, sorters }) => {
     try{
@@ -20,7 +27,8 @@ export const customDataProvider: DataProvider = {
         queryParams.append("sorters[0][order]", sorters[0].order);
       }
 
-      const response = await axios.get(`${API_URL}/${resource}?${queryParams.toString()}`);
+      const apiPath = resourceToAPIPath[resource] || resource;
+      const response = await axios.get(`${API_URL}/${apiPath}?${queryParams.toString()}`);
       
       return {
         data: response.data,
@@ -33,7 +41,8 @@ export const customDataProvider: DataProvider = {
 
   getOne: async ({ resource, id }) => {
     try {
-      const response = await axios.get(`${API_URL}/${resource}/${id}`);
+      const apiPath = resourceToAPIPath[resource] || resource;
+      const response = await axios.get(`${API_URL}/${apiPath}/${id}`);
       return { data: response.data };
     } catch (error) {
       throw errorHandler(error, `getOne for ${resource} with id ${id}`);
@@ -42,7 +51,8 @@ export const customDataProvider: DataProvider = {
 
   create: async ({ resource, variables }) => {
     try {
-      const response = await axios.post(`${API_URL}/${resource}`, variables);
+      const apiPath = resourceToAPIPath[resource] || resource;
+      const response = await axios.post(`${API_URL}/${apiPath}`, variables);
       return { data: response.data };
     } catch (error) {
       throw errorHandler(error, `create for ${resource}`);
@@ -51,8 +61,9 @@ export const customDataProvider: DataProvider = {
 
   update: async ({ resource, id, variables }) => {
     try {
-      const response = await axios.put(`${API_URL}/${resource}/${id}`, variables);
-    return { data: response.data };
+      const apiPath = resourceToAPIPath[resource] || resource;
+      const response = await axios.put(`${API_URL}/${apiPath}/${id}`, variables);
+      return { data: response.data };
     } catch (error) {
       throw errorHandler(error, `update for ${resource} with id ${id}`);
     }
@@ -60,7 +71,8 @@ export const customDataProvider: DataProvider = {
 
   deleteOne: async ({ resource, id }) => {
     try {
-      const response = await axios.delete(`${API_URL}/${resource}/${id}`);
+      const apiPath = resourceToAPIPath[resource] || resource;
+      const response = await axios.delete(`${API_URL}/${apiPath}/${id}`);
       return { data: response.data };
     } catch (error) {
       throw errorHandler(error, `deleteOne for ${resource} with id ${id}`);
@@ -69,8 +81,8 @@ export const customDataProvider: DataProvider = {
 
   getApiUrl: () => API_URL,
 
-  getMany: async () => {throw new Error("deleteMany is not implemented");},
+  getMany: async () => {throw new Error("getMany is not implemented");},
   deleteMany: async () => {throw new Error("deleteMany is not implemented");},
-  updateMany: async () => {throw new Error("deleteMany is not implemented");},
-  createMany: async () => {throw new Error("deleteMany is not implemented");},
+  updateMany: async () => {throw new Error("updateMany is not implemented");},
+  createMany: async () => {throw new Error("createMany is not implemented");},
 };

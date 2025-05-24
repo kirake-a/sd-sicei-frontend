@@ -1,44 +1,48 @@
 import { Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
-import { customDataProvider } from "./api/data-provider";
-
-import PersonIcon from '@mui/icons-material/Person';
-import SubjectIcon from '@mui/icons-material/Subject';
-import GradingIcon from '@mui/icons-material/Grading';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import SummarizeIcon from '@mui/icons-material/Summarize';
-
 import {
   ErrorComponent,
   RefineSnackbarProvider,
   ThemedLayoutV2,
   useNotificationProvider,
 } from "@refinedev/mui";
-
-import CssBaseline from "@mui/material/CssBaseline";
-import GlobalStyles from "@mui/material/GlobalStyles";
 import routerBindings, {
   DocumentTitleHandler,
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
+
+import { customDataProvider } from "./api/data-provider";
+import { resources } from "./utils/resources";
+
+import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
+
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
-import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
+
+import { Header } from "./components/header";
+
 import {
   StudentCreate,
   StudentEdit,
   StudentList,
   StudentShow
 } from "./pages/students"
+
 import {
   SubjectCreate,
   SubjectEdit,
   SubjectList,
   SubjectShow
 } from "./pages/subjects"
+
+import {
+  StudentGradesCreate,
+  StudentGradesEdit,
+  StudentGradesList,
+  StudentGradesShow
+} from "./pages/grades-students"
 
 const StickyHeader = () => <Header sticky />;
 
@@ -55,94 +59,7 @@ function App() {
                 dataProvider={customDataProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                resources={[  
-                  {
-                    name: "students",
-                    list: "/students",
-                    create: "/students/create",
-                    edit: "/students/edit/:id",
-                    show: "/students/show/:id",
-                    meta: {
-                      canDelete: true,
-                      icon: <PersonIcon />,
-                    },
-                  },
-                  {
-                    name: "subjects",
-                    list: "/subjects",
-                    create: "/subjects/create",
-                    edit: "/subjects/edit/:id",
-                    show: "/subjects/show/:id",
-                    meta: {
-                      canDelete: true,
-                      icon: <SubjectIcon />,
-                    },
-                  },
-                  {
-                    name: "grades",
-                    list: "/grades",
-                    meta: {
-                      label: "Grades",
-                      icon: <GradingIcon />,
-                    },
-                  },
-                  {
-                    name: "student-grades",
-                    list: "/student-grades",
-                    create: "/student-grades/create",
-                    edit: "/student-grades/edit/:id",
-                    show: "/student-grades/show/:id",
-                    meta: {
-                      parent: "grades",
-                      canDelete: false,
-                      icon: <AssignmentIndIcon />,
-                    },
-                  },
-                  {
-                    name: "subject-grades",
-                    list: "/subject-grades",
-                    create: "/subject-grades/create",
-                    edit: "/subject-grades/edit/:id",
-                    show: "/subject-grades/show/:id",
-                    meta: {
-                      parent: "grades",
-                      canDelete: false,
-                      icon: <SummarizeIcon />,
-                    },
-                  },
-                  {
-                    name: "reports",
-                    list: "/reports",
-                    meta: {
-                      label: "Reports",
-                      icon: <AssessmentIcon />,
-                    },
-                  },
-                  {
-                    name: "student-reports",
-                    list: "/student-reports",
-                    create: "/student-reports/create",
-                    edit: "/student-reports/edit/:id",
-                    show: "/student-reports/show/:id",
-                    meta: {
-                      parent: "reports",
-                      canDelete: false,
-                      icon: <AssignmentIndIcon />,
-                    },
-                  },
-                  {
-                    name: "subject-reports",
-                    list: "/subject-reports",
-                    create: "/subject-reports/create",
-                    edit: "/subject-reports/edit/:id",
-                    show: "/subject-reports/show/:id",
-                    meta: {
-                      parent: "reports",
-                      canDelete: false,
-                      icon: <SummarizeIcon />,
-                    },
-                  },
-                ]}
+                resources={resources}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -174,6 +91,13 @@ function App() {
                       <Route path="create" element={<SubjectCreate />} />
                       <Route path="edit/:id" element={<SubjectEdit />} />
                       <Route path="show/:id" element={<SubjectShow />} />
+                    </Route>
+
+                    <Route path="/grades/students">
+                      <Route index element={<StudentGradesList />} />
+                      <Route path="create" element={<StudentGradesCreate />} />
+                      <Route path="edit/:id" element={<StudentGradesEdit />} />
+                      <Route path="show/:id" element={<StudentGradesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />
