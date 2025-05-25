@@ -19,6 +19,7 @@ export const SubjectList = () => {
         field: "id",
         headerName: "ID",
         type: "number",
+        flex: 1,
         minWidth: 50,
         display: "flex",
         align: "left",

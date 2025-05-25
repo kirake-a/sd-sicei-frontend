@@ -1,8 +1,5 @@
-import { Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
-  DeleteButton,
-  EditButton,
   List,
   ShowButton,
   useDataGrid,
@@ -20,43 +17,21 @@ export const StudentGradesList = () => {
         field: "id",
         headerName: "ID",
         type: "number",
+        flex: 1,
         minWidth: 50,
         display: "flex",
         align: "left",
         headerAlign: "left",
       },
       {
-        field: "name",
+        field: "fullname",
         flex: 1,
-        headerName: "Name",
+        headerName: "Fullname",
         minWidth: 200,
         display: "flex",
-      },
-      {
-        field: "lastname",
-        flex: 1,
-        headerName: "Lastname",
-        minWidth: 200,
-        display: "flex",
-      },
-      {
-        field: "email",
-        flex: 1,
-        headerName: "Email",
-        minWidth: 200,
-        display: "flex",
-        renderCell: function render({ value }) {
-          return (
-            <Typography
-              component="p"
-              whiteSpace="pre"
-              overflow="hidden"
-              textOverflow="ellipsis"
-            >
-              {value ?? "-"}
-            </Typography>
-          )
-        }
+        renderCell: function render({ row }) {
+          return `${row.name} ${row.lastname}`;
+        },
       },
       {
         field: "semester",
@@ -67,23 +42,15 @@ export const StudentGradesList = () => {
       },
       {
         field: "actions",
-        headerName: "Actions",
-        align: "right",
-        headerAlign: "right",
+        headerName: "Action",
+        align: "center",
+        headerAlign: "center",
         minWidth: 120,
         sortable: false,
         display: "flex",
         renderCell: function render({ row }) {
           return (
-            <>
-              <EditButton hideText recordItemId={row.id} />
-              <ShowButton hideText recordItemId={row.id} />
-              <DeleteButton
-                hideText
-                recordItemId={row.id}
-                confirmTitle={`Are you sure you want to delete the student: ${row.name} ${row.lastname}?`}
-              />
-            </>
+            <ShowButton hideText recordItemId={row.id} />
           );
         },
       },
