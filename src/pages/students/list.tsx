@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import { useEffect } from "react";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
   DeleteButton,
@@ -12,6 +13,7 @@ import React from "react";
 import { Student } from "../../interfaces/student_interface";
 
 export const StudentList = () => {
+
   const { dataGridProps } = useDataGrid<Student>();
 
   const columns = React.useMemo<GridColDef[]>(

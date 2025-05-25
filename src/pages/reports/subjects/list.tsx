@@ -32,36 +32,16 @@ export const SubjectReportsList = () => {
         display: "flex",
       },
       {
-        field: "description",
+        field: "semester",
         flex: 1,
-        headerName: "Description",
-        minWidth: 200,
-        renderCell: (params) => (
-          <span
-            style={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "block",
-              maxWidth: "100%",
-            }}
-            title={params.value}
-          >
-            {params.value}
-          </span>
-        ),
-      },      
-      {
-        field: "credits",
-        flex: 1,
-        headerName: "Credits",
+        headerName: "Semester",
         minWidth: 200,
         display: "flex",
       },
       {
-        field: "semester",
+        field: "average",
         flex: 1,
-        headerName: "Semester",
+        headerName: "Average",
         minWidth: 200,
         display: "flex",
       },
@@ -92,7 +72,7 @@ export const SubjectReportsList = () => {
   );
 
   return (
-    <List>
+    <List canCreate={false}>
       <DataGrid
         {...dataGridProps}
         columns={columns}

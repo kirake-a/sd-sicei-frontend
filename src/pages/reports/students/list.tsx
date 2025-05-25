@@ -53,9 +53,9 @@ export const StudentReportsList = () => {
         display: "flex",
       },
       {
-        field: "number of failed subjects",
+        field: "status",
         flex: 1,
-        headerName: "Number of Failed Subjects",
+        headerName: "Status",
         minWidth: 200,
         display: "flex",
       },
@@ -63,7 +63,7 @@ export const StudentReportsList = () => {
         field: "average",
         flex: 1,
         headerName: "Average",
-        minWidth: 200,
+        minWidth: 100,
         display: "flex",
       },
       {
@@ -93,7 +93,7 @@ export const StudentReportsList = () => {
   );
 
   return (
-    <List>
+    <List canCreate={false}>
       <Box mb={2}>
         <FormControl fullWidth size="small">
           <InputLabel id="semester-select-label">Semester</InputLabel>
