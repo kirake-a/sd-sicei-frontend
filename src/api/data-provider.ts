@@ -2,6 +2,10 @@ import { DataProvider } from "@refinedev/core";
 import axios from "axios";
 
 import { errorHandler } from "../utils/errorHandler";
+import {
+  populateGradesByStudentId,
+  populateGradesBySubjectId
+} from "./api_grades";
 
 const API_URL = import.meta.env.VITE_SICEI_API_ORIGIN;
 
@@ -53,6 +57,13 @@ export const customDataProvider: DataProvider = {
     try {
       const apiPath = resourceToAPIPath[resource] || resource;
       const response = await axios.post(`${API_URL}/${apiPath}`, variables);
+
+      if (resource === "students") {
+        await populateGradesByStudentId(response.data.id, response.data.semester);
+      } else if (resource === "subjects") {
+        await populateGradesBySubjectId(response.data.id, response.data.semester);
+      }
+
       return { data: response.data };
     } catch (error) {
       throw errorHandler(error, `create for ${resource}`);
