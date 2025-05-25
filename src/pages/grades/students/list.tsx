@@ -9,7 +9,7 @@ import {
 } from "@refinedev/mui";
 import React from "react";
 
-import { Student } from "../../interfaces/student_interface";
+import { Student } from "../../../interfaces/student_interface";
 
 export const StudentGradesList = () => {
   const { dataGridProps } = useDataGrid<Student>();

@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import { useShow } from "@refinedev/core";
 import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
-import { Student } from "../../interfaces/student_interface";
+import { Student } from "../../../interfaces/student_interface";
 
 export const StudentGradesShow = () => {
   const { query } = useShow<Student>();
@@ -23,14 +23,19 @@ export const StudentGradesShow = () => {
         <TextField value={record?.name + " " + record?.lastname} />
 
         <Typography variant="body1" fontWeight="bold">
-          {"Email"}
-        </Typography>
-        <TextField value={record?.email} />
-
-        <Typography variant="body1" fontWeight="bold">
           {"Semester"}
         </Typography>
         <TextField value={record?.semester} />
+
+        <Typography variant="body1" fontWeight="bold">
+          {"Subjects"}
+        </Typography>
+        <TextField value="List of Subjects" />
+
+        <Typography variant="body1" fontWeight="bold">
+          {"Grades"}
+        </Typography>
+        <TextField value="List of Grades" />
       </Stack>
     </Show>
   );
