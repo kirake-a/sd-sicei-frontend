@@ -53,9 +53,9 @@ export const StudentReportsList = () => {
         display: "flex",
       },
       {
-        field: "number of failed subjects",
+        field: "status",
         flex: 1,
-        headerName: "Number of Failed Subjects",
+        headerName: "Status",
         minWidth: 200,
         display: "flex",
       },
