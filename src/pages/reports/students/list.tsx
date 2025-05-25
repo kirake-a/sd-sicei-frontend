@@ -88,13 +88,7 @@ export const StudentReportsList = () => {
         renderCell: function render({ row }) {
           return (
             <>
-              <EditButton hideText recordItemId={row.id} />
               <ShowButton hideText recordItemId={row.id} />
-              <DeleteButton
-                hideText
-                recordItemId={row.id}
-                confirmTitle={`Are you sure you want to delete the student: ${row.name} ${row.lastname}?`}
-              />
             </>
           );
         },
