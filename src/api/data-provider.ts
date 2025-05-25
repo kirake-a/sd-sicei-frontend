@@ -92,6 +92,18 @@ export const customDataProvider: DataProvider = {
 
   getApiUrl: () => API_URL,
 
+  custom: async ({ url, method, headers }) => {
+    const response = await axios.request({
+      url: `${API_URL}/${url}`,
+      method,
+      headers,
+    });
+
+    return {
+      data: response.data,
+    };
+  },
+
   getMany: async () => {throw new Error("getMany is not implemented");},
   deleteMany: async () => {throw new Error("deleteMany is not implemented");},
   updateMany: async () => {throw new Error("updateMany is not implemented");},
