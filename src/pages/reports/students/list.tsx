@@ -16,9 +16,20 @@ import {
   Select,
   Box,
 } from "@mui/material";
+import { data } from "react-router";
 
 export const StudentReportsList = () => {
   const { dataGridProps } = useDataGrid<Student>();
+  const studentRecord = [
+  {
+    id: 1,
+    name: "Carlos",
+    lastname: "Ramírez",
+    "number of failed subjects": 1,
+    status: "Regular",
+    average: 8.5,
+  },
+];
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -137,6 +148,7 @@ export const StudentReportsList = () => {
         {...dataGridProps}
         columns={columns}
         getRowId={(row) => row.id}
+        rows={studentRecord}
       />
     </List>
   );
