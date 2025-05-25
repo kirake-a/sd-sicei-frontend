@@ -1,42 +1,69 @@
-import { Stack, Typography } from "@mui/material";
-import { useShow } from "@refinedev/core";
-import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
-import { Student } from "../../../interfaces/student_interface";
+import { Typography } from "@mui/material";
+import { useCustom } from "@refinedev/core";
+import { useParams } from "react-router-dom";
+import { GradeToShow } from "../../../interfaces/grade_interface";
+
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import {
+  Show
+} from "@refinedev/mui";
+
+import Paper from '@mui/material/Paper';
 
 export const StudentGradesShow = () => {
-  const { query } = useShow<Student>();
+  const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading } = query;
-  const record = data?.data;
+  const { data, isLoading } = useCustom<GradeToShow[]>({
+    url: `grades/students/${id}`,
+    method: "get"
+  });
+
+  const rows = data?.data || [];
+
+  const columns: GridColDef[] = [
+    {
+      field: 'subject',
+      headerName: 'Subject',
+      flex: 1,
+      minWidth: 70,
+      display: 'flex',
+      align: 'left',
+      headerAlign: 'left',
+    },
+    {
+      field: 'value',
+      headerName: 'Grades',
+      width: 130
+    },
+    {
+      field: 'materyLevel',
+      headerName: 'Mastery level',
+      width: 130,
+      renderCell: function render({ row }) {
+        if (row.value >= 90) {
+          return <Typography color="green">Excellent</Typography>;
+        } else if (row.value >= 80) {
+          return <Typography color="blue">Good</Typography>;
+        } else if (row.value >= 70) {
+          return <Typography color="orange">Satisfactory</Typography>;
+        } else {
+          return <Typography color="red">Unsatisfactory</Typography>;
+        }
+      }
+    },
+  ];
 
   return (
-    <Show isLoading={isLoading}>
-      <Stack gap={1}>
-        <Typography variant="body1" fontWeight="bold">
-          {"ID"}
-        </Typography>
-        <TextField value={record?.id} />
-
-        <Typography variant="body1" fontWeight="bold">
-          {"Full Name"}
-        </Typography>
-        <TextField value={record?.name + " " + record?.lastname} />
-
-        <Typography variant="body1" fontWeight="bold">
-          {"Semester"}
-        </Typography>
-        <TextField value={record?.semester} />
-
-        <Typography variant="body1" fontWeight="bold">
-          {"Subjects"}
-        </Typography>
-        <TextField value="List of Subjects" />
-
-        <Typography variant="body1" fontWeight="bold">
-          {"Grades"}
-        </Typography>
-        <TextField value="List of Grades" />
-      </Stack>
+    <Show isLoading={isLoading} title="Student Grades" >
+      <Paper sx={{ height: 400, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSizeOptions={[5, 10]}
+          sx={{ border: 0 }}
+          getRowId={(row) => row.id}
+        />
+      </Paper>
     </Show>
   );
 };

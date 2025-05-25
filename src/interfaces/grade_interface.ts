@@ -7,4 +7,10 @@ export interface Grade {
     value: number;
 }
 
+export interface GradeToShow {
+    id: number;
+    subject: string;
+    value: number;
+}
+
 export type CreateGrade = Omit<Grade, "id">;
