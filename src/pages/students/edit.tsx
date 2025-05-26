@@ -80,8 +80,10 @@ export const StudentEdit = () => {
         <TextField
           {...register("semester", {
             required: "This field is required",
+            min: { value: 1, message: "Semester must be at least 1" },
+            max: { value: 10, message: "Semester must be at most 10" },
           })}
-          error={!!errors?.semester}
+          error={!!errors.semester}
           helperText={typeof errors.semester?.message === "string" ? errors.semester.message : ""}
           margin="normal"
           fullWidth
@@ -89,7 +91,8 @@ export const StudentEdit = () => {
             inputLabel: { shrink: true },
           }}
           type="number"
-          label={"Semester"}
+          inputProps={{ min: 1, max: 10 }}
+          label="Semester"
           name="semester"
         />
       </Box>

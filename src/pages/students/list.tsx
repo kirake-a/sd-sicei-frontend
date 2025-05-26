@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { useEffect } from "react";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
   DeleteButton,

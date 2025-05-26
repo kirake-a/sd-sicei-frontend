@@ -7,8 +7,15 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import React from "react";
-
 import { Subject } from "../../../interfaces/subject_interface";
+
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Box,
+} from "@mui/material";
 
 export const SubjectReportsList = () => {
   const { dataGridProps } = useDataGrid<Subject>();
@@ -73,6 +80,29 @@ export const SubjectReportsList = () => {
 
   return (
     <List canCreate={false}>
+      <Box mb={2}>
+        <FormControl fullWidth size="small">
+          <InputLabel id="semester-select-label">Semester</InputLabel>
+          <Select
+            labelId="semester-select-label"
+            id="semester-select"
+            defaultValue=""
+            label="Semester"
+          >
+            <MenuItem value="1">1</MenuItem>
+            <MenuItem value="2">2</MenuItem>
+            <MenuItem value="3">3</MenuItem>
+            <MenuItem value="4">4</MenuItem>
+            <MenuItem value="5">5</MenuItem>
+            <MenuItem value="6">6</MenuItem>
+            <MenuItem value="7">7</MenuItem>
+            <MenuItem value="8">8</MenuItem>
+            <MenuItem value="9">9</MenuItem>
+            <MenuItem value="10">10</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+            
       <DataGrid
         {...dataGridProps}
         columns={columns}

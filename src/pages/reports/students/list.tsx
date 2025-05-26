@@ -1,7 +1,5 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
-  DeleteButton,
-  EditButton,
   List,
   ShowButton,
   useDataGrid,
