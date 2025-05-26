@@ -44,6 +44,13 @@ import {
   StudentGradesShow
 } from "./pages/grades-students"
 
+import {
+  SubjectGradesCreate,
+  SubjectGradesEdit,
+  SubjectGradesList,
+  SubjectGradesShow
+} from "./pages/grades-subjects"
+
 const StickyHeader = () => <Header sticky />;
 
 function App() {
@@ -100,6 +107,12 @@ function App() {
                       <Route path="show/:id" element={<StudentGradesShow />} />
                     </Route>
 
+                    <Route path="/grades/subjects">
+                      <Route index element={<SubjectGradesList />} />
+                      <Route path="create" element={<SubjectGradesCreate />} />
+                      <Route path="edit/:id" element={<SubjectGradesEdit />} />
+                      <Route path="show/:id" element={<SubjectGradesShow />} />
+                    </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   
