@@ -25,35 +25,15 @@ export const StudentGradesEdit = () => {
   const [editedRows, setEditedRows] = useState<Record<number, number>>({});
   const [errors, setErrors] = useState<Record<number, string>>({});
 
-useEffect(() => {
-  if (initialRows.length > 0) {
-    const initialState: Record<number, number> = {};
-    initialRows.forEach(row => {
-      initialState[row.id] = row.value;
-    });
-    setEditedRows(initialState);
-  }
-}, [initialRows]);
-
-
-  const handleChange = (id: number, value: number) => {
-
-    if (isNaN(value)) {
-      setErrors(prev => ({ ...prev, [id]: "Value must be a number" }));
-      return;
+  useEffect(() => {
+    if (initialRows.length > 0) {
+      const initialState: Record<number, number> = {};
+      initialRows.forEach(row => {
+        initialState[row.id] = row.value;
+      });
+      setEditedRows(initialState);
     }
-
-    if (value < 0 || value > 100) {
-      setErrors(prev => ({ ...prev, [id]: "Value must be between 0 and 100" }));
-    } else {
-      setErrors(prev => ({ ...prev, [id]: "" }));
-    }
-
-    setEditedRows(prev => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
+  }, [initialRows]);
 
   const handleUpdate = (rowId: number, subject: string) => {
     const updatedValue = editedRows[rowId] ?? initialRows.find(row => row.id === rowId)?.value;
@@ -77,23 +57,49 @@ useEffect(() => {
       renderCell: function render({ row }) {
         return (
           <TextField
-            margin="normal"
-            value={editedRows[row.id] ?? row.value}
-            onChange={(e) => handleChange(row.id, parseInt(e.target.value))}
+            type="number"
+            name="value"
+            value={
+              editedRows[row.id] === undefined || isNaN(editedRows[row.id])
+                ? ""
+                : editedRows[row.id].toString()
+            }
+            onChange={(e) => {
+              const rawValue = e.target.value;
+
+              if (rawValue === "") {
+                setEditedRows(prev => ({ ...prev, [row.id]: NaN }));
+                setErrors(prev => ({ ...prev, [row.id]: "Field is required" }));
+                return;
+              }
+
+              const value = Number(rawValue);
+
+              if (!Number.isInteger(value)) {
+                setErrors(prev => ({ ...prev, [row.id]: "Must be an integer" }));
+              } else if (value < 1 || value > 100) {
+                setErrors(prev => ({ ...prev, [row.id]: "1 - 100 credits" }));
+              } else {
+                setErrors(prev => ({ ...prev, [row.id]: "" }));
+              }
+
+              setEditedRows(prev => ({ ...prev, [row.id]: value }));
+            }}
             error={!!errors[row.id]}
             helperText={errors[row.id]}
             fullWidth
-            slotProps={{
-              inputLabel: { shrink: true },
-              htmlInput: { style: { padding: "3px" } },
+            inputProps={{
+              min: 1,
+              max: 100,
+              step: 1,
+              sx: {
+                height: '1px',
+                fontSize: '14px',
+              },
             }}
-            type="number"
-            label={"Grade"}
-            name="value"
           />
         )
       }
-      
     },
     {
       field: 'Action',
@@ -124,6 +130,7 @@ useEffect(() => {
     >
       <Paper sx={{ height: 400, width: '100%' }}>
         <DataGrid
+          rowHeight={60} 
           rows={initialRows}
           columns={columns}
           pageSizeOptions={[5, 10]}

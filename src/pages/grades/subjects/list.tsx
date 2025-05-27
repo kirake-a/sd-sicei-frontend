@@ -1,7 +1,5 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
-  DeleteButton,
-  EditButton,
   List,
   ShowButton,
   useDataGrid,
@@ -75,15 +73,7 @@ export const SubjectGradesList = () => {
         display: "flex",
         renderCell: function render({ row }) {
           return (
-            <>
-              <EditButton hideText recordItemId={row.id} />
-              <ShowButton hideText recordItemId={row.id} />
-              <DeleteButton
-                hideText
-                recordItemId={row.id}
-                confirmTitle={`Are you sure you want to delete the subject: ${row.name}?`}
-              />
-            </>
+            <ShowButton hideText recordItemId={row.id} />
           );
         },
       },

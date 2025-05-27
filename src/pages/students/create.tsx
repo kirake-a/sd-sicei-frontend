@@ -39,6 +39,7 @@ export const StudentCreate = () => {
           label="Name"
           name="name"
         />
+        
         <TextField
           {...register("lastname", { required: "This field is required" })}
           error={!!errors.lastname}
@@ -51,6 +52,7 @@ export const StudentCreate = () => {
           label="Lastname"
           name="lastname"
         />
+
         <TextField
           {...register("email", {
             required: "This field is required",
@@ -69,6 +71,7 @@ export const StudentCreate = () => {
           label="Email"
           name="email"
         />
+
         <TextField
           {...register("semester", {
             required: "This field is required",

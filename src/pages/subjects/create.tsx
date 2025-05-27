@@ -39,6 +39,7 @@ export const SubjectCreate = () => {
           label="Name"
           name="name"
         />
+        
         <TextField
           {...register("description")}
           margin="normal"
@@ -49,8 +50,13 @@ export const SubjectCreate = () => {
           label="Description"
           name="description"
         />
+
         <TextField
-          {...register("credits", { required: "This field is required" })}
+          {...register("credits", {
+            required: "This field is required",
+            min: { value: 1, message: "Semester must be at least 1" },
+            max: { value: 10, message: "Semester must be at most 10" },
+          })}
           error={!!errors.credits}
           helperText={typeof errors.credits?.message === "string" ? errors.credits.message : ""}
           margin="normal"
@@ -59,9 +65,11 @@ export const SubjectCreate = () => {
             inputLabel: { shrink: true },
           }}
           type="number"
+          inputProps={{ min: 1, max: 10 }}
           label="Credits"
           name="credits"
         />
+
         <TextField
           {...register("semester", {
             required: "This field is required",
