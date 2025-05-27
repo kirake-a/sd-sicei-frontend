@@ -92,11 +92,12 @@ export const customDataProvider: DataProvider = {
 
   getApiUrl: () => API_URL,
 
-  custom: async ({ url, method, headers }) => {
+  custom: async ({ url, method, headers, payload}) => {
     const response = await axios.request({
       url: `${API_URL}/${url}`,
       method,
       headers,
+      data: payload,
     });
 
     return {
