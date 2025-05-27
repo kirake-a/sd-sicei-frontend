@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { useCustom } from "@refinedev/core";
 import { useParams } from "react-router-dom";
-import { GradeToShow } from "../../interfaces/grade_interface";
+import { GradeToShow } from "../../../interfaces/grade_interface";
 
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {

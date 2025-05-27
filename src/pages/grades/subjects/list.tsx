@@ -6,10 +6,10 @@ import {
 } from "@refinedev/mui";
 import React from "react";
 
-import { Student } from "../../interfaces/student_interface";
+import { Subject } from "../../../interfaces/subject_interface";
 
-export const StudentGradesList = () => {
-  const { dataGridProps } = useDataGrid<Student>();
+export const SubjectGradesList = () => {
+  const { dataGridProps } = useDataGrid<Subject>();
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -17,21 +17,44 @@ export const StudentGradesList = () => {
         field: "id",
         headerName: "ID",
         type: "number",
-        flex: 1,
         minWidth: 50,
         display: "flex",
         align: "left",
         headerAlign: "left",
       },
       {
-        field: "fullname",
+        field: "name",
         flex: 1,
-        headerName: "Fullname",
+        headerName: "Name",
         minWidth: 200,
         display: "flex",
-        renderCell: function render({ row }) {
-          return `${row.name} ${row.lastname}`;
-        },
+      },
+      {
+        field: "description",
+        flex: 1,
+        headerName: "Description",
+        minWidth: 200,
+        renderCell: (params) => (
+          <span
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "block",
+              maxWidth: "100%",
+            }}
+            title={params.value}
+          >
+            {params.value}
+          </span>
+        ),
+      },      
+      {
+        field: "credits",
+        flex: 1,
+        headerName: "Credits",
+        minWidth: 200,
+        display: "flex",
       },
       {
         field: "semester",
@@ -42,9 +65,9 @@ export const StudentGradesList = () => {
       },
       {
         field: "actions",
-        headerName: "Action",
-        align: "center",
-        headerAlign: "center",
+        headerName: "Actions",
+        align: "right",
+        headerAlign: "right",
         minWidth: 120,
         sortable: false,
         display: "flex",
@@ -59,7 +82,7 @@ export const StudentGradesList = () => {
   );
 
   return (
-    <List>
+    <List canCreate={false}>
       <DataGrid
         {...dataGridProps}
         columns={columns}

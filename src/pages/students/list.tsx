@@ -12,6 +12,7 @@ import React from "react";
 import { Student } from "../../interfaces/student_interface";
 
 export const StudentList = () => {
+
   const { dataGridProps } = useDataGrid<Student>();
 
   const columns = React.useMemo<GridColDef[]>(
