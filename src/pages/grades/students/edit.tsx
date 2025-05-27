@@ -1,8 +1,9 @@
 import { TextField } from "@mui/material";
 import Button from '@mui/material/Button';
-import { useCustom } from "@refinedev/core";
+import { useCustom, useNotification } from "@refinedev/core";
 import { useParams } from "react-router-dom";
 import { GradeToShow } from "../../../interfaces/grade_interface";
+import axios from "axios";
 
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
@@ -14,6 +15,8 @@ import { useEffect, useState, useMemo } from "react";
 
 export const StudentGradesEdit = () => {
   const { id } = useParams();
+  const API_URL = import.meta.env.VITE_SICEI_API_ORIGIN;
+  const { open: notify } = useNotification();
 
   const { data, isLoading } = useCustom<GradeToShow[]>({
     url: `grades/students/${id}`,
@@ -35,9 +38,30 @@ export const StudentGradesEdit = () => {
     }
   }, [initialRows]);
 
-  const handleUpdate = (rowId: number, subject: string) => {
-    const updatedValue = editedRows[rowId] ?? initialRows.find(row => row.id === rowId)?.value;
+  const handleUpdate = async (rowId: number, subject: string) => {
+    const updatedValue =
+      editedRows[rowId] ?? initialRows.find(row => row.id === rowId)?.value;
+
     console.log(`Saving value for ${subject}: ${updatedValue}`);
+
+    try {
+      await axios.put(`${API_URL}/grades/${rowId}`, {
+        value: updatedValue,
+      });
+      if (notify) {
+        notify({
+          type: "success",
+          message: `Grade for ${subject} updated successfully`,
+        });
+      }
+    } catch (error) {
+      if (notify) {
+        notify({
+          type: "error",
+          message: "Failed to update grade",
+        });
+      }
+    }
   };
 
   const columns: GridColDef[] = [

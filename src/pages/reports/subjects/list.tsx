@@ -123,17 +123,19 @@ export const SubjectReportsList = () => {
     "#F36D8D", "#8DD1E1", "#FF6699", "#8884D8", "#82ca9d",
   ];
 
-  const semesterCounts = React.useMemo(() => {
-  const counts: Record<string, number> = {};
-  if (!dataGridProps.rows) return [];
+  const pieData = React.useMemo(() => {
+    if (!dataGridProps.rows) return [];
+
+    const countMap: Record<string, number> = {};
+
     dataGridProps.rows.forEach((subject) => {
-      const semesterKey = subject.semester.toString();
-      counts[semesterKey] = (counts[semesterKey] || 0) + 1;
+      const key = `${subject.credits} credits - Semester ${subject.semester}`;
+      countMap[key] = (countMap[key] || 0) + 1;
     });
 
-    return Object.entries(counts).map(([semester, count]) => ({
-      name: `Semester ${semester}`,
-      value: count,
+    return Object.entries(countMap).map(([name, value]) => ({
+      name,
+      value,
     }));
   }, [dataGridProps.rows]);
 
@@ -167,12 +169,12 @@ export const SubjectReportsList = () => {
       />
       <Box mb={4} height={300}>
         <Typography variant="h6" mb={2}>
-          Subjects per Semester
+          Subjects by Credits and Semester
         </Typography>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={semesterCounts}
+              data={pieData}
               cx="50%"
               cy="50%"
               outerRadius={100}
@@ -180,7 +182,7 @@ export const SubjectReportsList = () => {
               dataKey="value"
               label
             >
-              {semesterCounts.map((_, index) => (
+              {pieData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

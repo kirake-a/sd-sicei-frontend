@@ -14,19 +14,79 @@ import {
   MenuItem,
   Select,
   Box,
+  SelectChangeEvent,
+  Typography,
 } from "@mui/material";
 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 export const StudentReportsList = () => {
   const { dataGridProps } = useDataGrid<Student>();
-  const studentRecord = [
-  {
-    id: 1,
-    name: "Carlos",
-    lastname: "Ramírez",
-    status: "Regular",
-  },
-];
+
+  const [semester, setSemester] = React.useState<string>("");
+  
+  const handleSemesterChange = (event: SelectChangeEvent) => {
+    setSemester(event.target.value);
+  };
+
+  const [studentType, setStudentType] = React.useState<string>("all");
+
+  const handleStudentTypeChange = (event: SelectChangeEvent) => {
+    setStudentType(event.target.value);
+  };
+
+  const filteredRows = React.useMemo(() => {
+    if (!dataGridProps.rows) return [];
+
+    return dataGridProps.rows.filter((row) => {
+      const semesterMatch = semester === "" || row.semester.toString() === semester;
+      const statusMatch =
+        studentType === "all" ||
+        (studentType === "regular" && row.status === true) ||
+        (studentType === "irregular" && row.status === false);
+
+      return semesterMatch && statusMatch;
+    });
+  }, [dataGridProps.rows, semester, studentType]);
+
+  const COLORS = ["#4caf50", "#f44336"];
+
+  const pieData = React.useMemo(() => {
+    if (!dataGridProps.rows) return [];
+
+    const summary: { [key: string]: { regular: number; irregular: number } } = {};
+
+    dataGridProps.rows.forEach((row) => {
+      const sem = row.semester.toString();
+      const status = row.status ? "regular" : "irregular";
+
+      if (!summary[sem]) {
+        summary[sem] = { regular: 0, irregular: 0 };
+      }
+
+      summary[sem][status]++;
+    });
+
+    return Object.entries(summary).flatMap(([semester, counts]) => [
+      {
+        name: `Semester ${semester} - Regular`,
+        value: counts.regular,
+        group: "Regular",
+      },
+      {
+        name: `Semester ${semester} - Irregular`,
+        value: counts.irregular,
+        group: "Irregular",
+      },
+    ]);
+  }, [dataGridProps.rows]);
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -59,6 +119,9 @@ export const StudentReportsList = () => {
         headerName: "Status",
         minWidth: 200,
         display: "flex",
+        renderCell: function render({ row }) {
+          return row.status ? "Regular" : "Irregular";
+        },
       },
       {
         field: "semester",
@@ -95,17 +158,14 @@ export const StudentReportsList = () => {
             id="semester-select"
             defaultValue=""
             label="Semester"
+            onChange={handleSemesterChange}
           >
-            <MenuItem value="1">1</MenuItem>
-            <MenuItem value="2">2</MenuItem>
-            <MenuItem value="3">3</MenuItem>
-            <MenuItem value="4">4</MenuItem>
-            <MenuItem value="5">5</MenuItem>
-            <MenuItem value="6">6</MenuItem>
-            <MenuItem value="7">7</MenuItem>
-            <MenuItem value="8">8</MenuItem>
-            <MenuItem value="9">9</MenuItem>
-            <MenuItem value="10">10</MenuItem>
+            <MenuItem value="">All</MenuItem>
+            {[...Array(10)].map((_, i) => (
+              <MenuItem key={i + 1} value={(i + 1).toString()}>
+                {i + 1}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -116,8 +176,9 @@ export const StudentReportsList = () => {
           <Select
             labelId="type-student-select-label"
             id="type-student-select"
-            defaultValue=""
+            value={studentType}
             label="Type of Student"
+            onChange={handleStudentTypeChange}
           >
             <MenuItem value="all">All Students</MenuItem>
             <MenuItem value="regular">Regular Students</MenuItem>
@@ -130,7 +191,33 @@ export const StudentReportsList = () => {
         {...dataGridProps}
         columns={columns}
         getRowId={(row) => row.id}
+        rows={filteredRows}
       />
+
+      <Box mb={4}>
+        <Typography variant="h6" gutterBottom>
+          Student Status by Semester
+        </Typography>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            >
+              {pieData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.group === "Regular" ? COLORS[0] : COLORS[1]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </Box>
     </List>
   );
 };

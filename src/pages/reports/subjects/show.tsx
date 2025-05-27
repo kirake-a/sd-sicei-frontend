@@ -90,7 +90,7 @@ export const SubjectReportsShow = () => {
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`${subjectData?.data.name}_Grades.pdf`);
+    pdf.save(`${subjectData?.data.name + "_" + subjectData?.data.semester}Semester_Grades.pdf`);
   };
 
   const masteryData = React.useMemo(() => {
