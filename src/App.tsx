@@ -156,6 +156,12 @@ function App() {
                       <Route path="show/:id" element={<SubjectReportsShow />} />
                     </Route>
 
+                    <Route path="/grades/subjects">
+                      <Route index element={<SubjectGradesList />} />
+                      <Route path="create" element={<SubjectGradesCreate />} />
+                      <Route path="edit/:id" element={<SubjectGradesEdit />} />
+                      <Route path="show/:id" element={<SubjectGradesShow />} />
+                    </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   
