@@ -1,15 +1,27 @@
-import { Report } from "@mui/icons-material";
-
-export interface Report {
+export interface ReportStudent {
     id: string;
-    students: ReportToShow[];
+    students: ReportToShowStudent[];
     average: number;
 }
 
-export interface ReportToShow {
+export interface ReportToShowStudent  {
     id: number;
     student: string;
     value: number;
 }
 
-export type CreateReport = Omit<Report, "id">;
+export interface ReportSubject {
+    id: string;
+    subjects: ReportToShowSubject[];
+    average: number;
+}
+
+export interface ReportToShowSubject {
+    id: number;
+    subject: string;
+    value: number;
+}
+
+export type CreateReportStudent = Omit<ReportStudent, "id">;
+
+export type CreateReportSubject = Omit<ReportStudent, "id">;

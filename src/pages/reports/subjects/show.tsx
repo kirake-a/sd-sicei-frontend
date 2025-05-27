@@ -2,13 +2,16 @@ import { Paper, Stack, Box, Button, Typography } from "@mui/material";
 import { useCustom } from "@refinedev/core";
 import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
 import { useParams } from "react-router-dom";
-import { Report } from "../../../interfaces/report_interface";
+import { ReportStudent } from "../../../interfaces/report_interface";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export const SubjectReportsShow = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading } = useCustom<Report>({
+  const { data, isLoading } = useCustom<ReportStudent>({
     url: `reports/subjects/${id}/grades`,
     method: "get"
   });
@@ -47,8 +50,41 @@ export const SubjectReportsShow = () => {
     },
   ];
 
+    const contentRef = useRef<HTMLDivElement>(null);
+  
+    const handleDownloadPdf = async () => {
+      if (!contentRef.current) return;
+  
+      const canvas = await html2canvas(contentRef.current, {
+        scale: 2,
+        useCORS: true,
+      });
+      const imgData = canvas.toDataURL("image/png");
+  
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+  
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Grades_Subject's_Name.pdf`);
+    };
+
   return (
     <Show isLoading={isLoading} canEdit={false} title="Subjects Reports">
+      <Box mb={2} display="flex" justifyContent="flex-end">
+        <Button variant="contained" color="primary" onClick={handleDownloadPdf}>
+          Download PDF
+        </Button>
+      </Box>
+
+      {}
+      <div ref={contentRef}>
       <Stack gap={2}>
           <Box display="flex" gap={4}>
             <Box flex={1}>
@@ -62,7 +98,7 @@ export const SubjectReportsShow = () => {
               <Typography variant="body1" fontWeight="bold">
                 Semester
               </Typography>
-              <TextField value="nose" />
+              <TextField value="Subject's Semester" />
             </Box>
 
             <Box flex={1}>
@@ -83,6 +119,7 @@ export const SubjectReportsShow = () => {
             />
           </Paper>
         </Stack>
+        </div>
     </Show>
   );
 };

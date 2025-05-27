@@ -7,40 +7,20 @@ import {
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useShow } from "@refinedev/core";
+import { useCustom } from "@refinedev/core";
+import { useParams } from "react-router-dom";
 import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
-import { Student } from "../../../interfaces/student_interface";
+import { ReportSubject } from "../../../interfaces/report_interface";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 
 export const StudentReportsShow = () => {
-  const { query } = useShow<Student>();
-  const { isLoading } = query;
+  const { id } = useParams<{ id: string }>();
 
-  const record = {
-    id: 1,
-    name: "Andrea",
-    lastname: "González",
-    semester: 5,
-    subjects: ["Mathematics", "Physics", "Chemistry", "English", "History"],
-    grades: [95, 88, 85, 92, 86],
-  };
-
-  const subjectGradeRows =
-    record?.subjects?.map((subject, index) => ({
-      id: index,
-      subject,
-      grade: record?.grades?.[index],
-    })) || [];
-
-  const calculateAverage = (grades?: number[]): string => {
-    if (!grades || grades.length === 0) return "N/A";
-
-    const total = grades.reduce((sum, grade) => sum + grade, 0);
-    const average = total / grades.length;
-    return average.toFixed(2);
-  };
-
-  const average = calculateAverage(record?.grades);
+  const { data, isLoading } = useCustom<ReportSubject>({
+      url: `reports/students/${id}/grades`,
+      method: "get"
+  });
+  const rows = data?.data?.subjects ?? [];
 
   const columns: GridColDef[] = [
     {
@@ -50,7 +30,7 @@ export const StudentReportsShow = () => {
       minWidth: 150,
     },
     {
-      field: "grade",
+      field: "value",
       headerName: "Grade",
       flex: 1,
       minWidth: 100,
@@ -80,7 +60,7 @@ export const StudentReportsShow = () => {
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`boleta_${record.name}_${record.lastname}.pdf`);
+    pdf.save(`Grades_Student's_Full_Name.pdf`);
   };
 
   return (
@@ -99,27 +79,27 @@ export const StudentReportsShow = () => {
               <Typography variant="body1" fontWeight="bold">
                 Full Name
               </Typography>
-              <TextField value={record?.name + " " + record?.lastname} />
+              <TextField value="Student's Name" />
             </Box>
 
             <Box flex={1}>
               <Typography variant="body1" fontWeight="bold">
                 Semester
               </Typography>
-              <TextField value={record?.semester} />
+              <TextField value="Student's Semester" />
             </Box>
 
             <Box flex={1}>
               <Typography variant="body1" fontWeight="bold">
                 Student's Average
               </Typography>
-              <TextField value={average} />
+              <TextField value={data?.data?.average} />
             </Box>
           </Box>
 
           <Box>
             <DataGrid
-              rows={subjectGradeRows}
+              rows={rows}
               columns={columns}
               hideFooter
               autoHeight
