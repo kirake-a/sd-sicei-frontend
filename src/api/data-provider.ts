@@ -13,7 +13,7 @@ const resourceToAPIPath: Record<string, string> = {
   "grades-students": "grades/students",
   "grades-subjects": "grades/subjects",
   "reports-students": "reports/students",
-  "reports-subjects": "reports/subjects",
+  "reports-subjects": "grades/subjects",
 }
 
 export const customDataProvider: DataProvider = {

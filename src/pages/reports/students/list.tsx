@@ -23,9 +23,7 @@ export const StudentReportsList = () => {
     id: 1,
     name: "Carlos",
     lastname: "Ramírez",
-    "number of failed subjects": 1,
     status: "Regular",
-    average: 8.5,
   },
 ];
 
@@ -55,24 +53,10 @@ export const StudentReportsList = () => {
         display: "flex",
       },
       {
-        field: "number of failed subjects",
-        flex: 1,
-        headerName: "Number of Failed Subjects",
-        minWidth: 200,
-        display: "flex",
-      },
-      {
         field: "status",
         flex: 1,
         headerName: "Status",
         minWidth: 200,
-        display: "flex",
-      },
-      {
-        field: "average",
-        flex: 1,
-        headerName: "Average",
-        minWidth: 100,
         display: "flex",
       },
       {
