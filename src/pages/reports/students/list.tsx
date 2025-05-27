@@ -5,6 +5,7 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import React from "react";
+
 import { Student } from "../../../interfaces/student_interface";
 
 import {
@@ -14,7 +15,7 @@ import {
   Select,
   Box,
 } from "@mui/material";
-import { data } from "react-router";
+
 
 export const StudentReportsList = () => {
   const { dataGridProps } = useDataGrid<Student>();
@@ -69,9 +70,7 @@ export const StudentReportsList = () => {
         display: "flex",
         renderCell: function render({ row }) {
           return (
-            <>
-              <ShowButton hideText recordItemId={row.id} />
-            </>
+            <ShowButton hideText recordItemId={row.id} />
           );
         },
       },
@@ -124,7 +123,6 @@ export const StudentReportsList = () => {
         {...dataGridProps}
         columns={columns}
         getRowId={(row) => row.id}
-        rows={studentRecord}
       />
     </List>
   );

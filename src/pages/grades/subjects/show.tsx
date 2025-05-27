@@ -37,7 +37,7 @@ export const SubjectGradesShow = () => {
         if (row.value >= 90) {
           return <Typography color="green">Excellent</Typography>;
         } else if (row.value >= 80) {
-          return <Typography color="blue">Good</Typography>;
+          return <Typography color="blue">Really Good</Typography>;
         } else if (row.value >= 70) {
           return <Typography color="orange">Satisfactory</Typography>;
         } else {
@@ -48,7 +48,7 @@ export const SubjectGradesShow = () => {
   ];
 
   return (
-    <Show isLoading={isLoading} title="Student Grades" >
+    <Show isLoading={isLoading} title="Subject Grades" >
       <Paper sx={{ height: 400, width: '100%' }}>
         <DataGrid
           rows={rows}

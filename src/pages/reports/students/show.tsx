@@ -14,7 +14,7 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 
 export const StudentReportsShow = () => {
   const { query } = useShow<Student>();
-  const { data, isLoading } = query;
+  const { isLoading } = query;
 
   const record = {
     id: 1,
@@ -84,7 +84,7 @@ export const StudentReportsShow = () => {
   };
 
   return (
-    <Show isLoading={isLoading} canEdit={false}>
+    <Show isLoading={isLoading} canEdit={false} title="Student Reports">
       <Box mb={2} display="flex" justifyContent="flex-end">
         <Button variant="contained" color="primary" onClick={handleDownloadPdf}>
           Download PDF

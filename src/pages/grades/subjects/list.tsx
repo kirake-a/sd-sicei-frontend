@@ -82,7 +82,7 @@ export const SubjectGradesList = () => {
   );
 
   return (
-    <List>
+    <List canCreate={false}>
       <DataGrid
         {...dataGridProps}
         columns={columns}

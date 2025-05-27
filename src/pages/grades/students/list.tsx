@@ -59,7 +59,7 @@ export const StudentGradesList = () => {
   );
 
   return (
-    <List>
+    <List canCreate={false}>
       <DataGrid
         {...dataGridProps}
         columns={columns}
