@@ -14,8 +14,18 @@ import {
   MenuItem,
   Select,
   Box,
-  SelectChangeEvent
+  SelectChangeEvent,
+  Typography
 } from "@mui/material";
+
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 export const SubjectReportsList = () => {
   const { dataGridProps } = useDataGrid<Subject>();
@@ -39,74 +49,93 @@ export const SubjectReportsList = () => {
   }, [dataGridProps.rows, semester]);
 
   const columns = React.useMemo<GridColDef[]>(
-      () => [
-        {
-          field: "id",
-          headerName: "ID",
-          type: "number",
-          minWidth: 50,
-          display: "flex",
-          align: "left",
-          headerAlign: "left",
+    () => [
+      {
+        field: "id",
+        headerName: "ID",
+        type: "number",
+        minWidth: 50,
+        display: "flex",
+        align: "left",
+        headerAlign: "left",
+      },
+      {
+        field: "name",
+        flex: 1,
+        headerName: "Name",
+        minWidth: 200,
+        display: "flex",
+      },
+      {
+        field: "description",
+        flex: 1,
+        headerName: "Description",
+        minWidth: 200,
+        renderCell: (params) => (
+          <span
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "block",
+              maxWidth: "100%",
+            }}
+            title={params.value}
+          >
+            {params.value}
+          </span>
+        ),
+      },      
+      {
+        field: "credits",
+        flex: 1,
+        headerName: "Credits",
+        minWidth: 200,
+        display: "flex",
+      },
+      {
+        field: "semester",
+        flex: 1,
+        headerName: "Semester",
+        minWidth: 200,
+        display: "flex",
+      },
+      {
+        field: "actions",
+        headerName: "Actions",
+        align: "right",
+        headerAlign: "right",
+        minWidth: 120,
+        sortable: false,
+        display: "flex",
+        renderCell: function render({ row }) {
+          return (
+            <ShowButton hideText recordItemId={row.id} />
+          );
         },
-        {
-          field: "name",
-          flex: 1,
-          headerName: "Name",
-          minWidth: 200,
-          display: "flex",
-        },
-        {
-          field: "description",
-          flex: 1,
-          headerName: "Description",
-          minWidth: 200,
-          renderCell: (params) => (
-            <span
-              style={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "block",
-                maxWidth: "100%",
-              }}
-              title={params.value}
-            >
-              {params.value}
-            </span>
-          ),
-        },      
-        {
-          field: "credits",
-          flex: 1,
-          headerName: "Credits",
-          minWidth: 200,
-          display: "flex",
-        },
-        {
-          field: "semester",
-          flex: 1,
-          headerName: "Semester",
-          minWidth: 200,
-          display: "flex",
-        },
-        {
-          field: "actions",
-          headerName: "Actions",
-          align: "right",
-          headerAlign: "right",
-          minWidth: 120,
-          sortable: false,
-          display: "flex",
-          renderCell: function render({ row }) {
-            return (
-              <ShowButton hideText recordItemId={row.id} />
-            );
-          },
-        },
-      ],
-      []
-    );
+      },
+    ],
+    []
+  );
+
+  const COLORS = [
+    "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28CF3",
+    "#F36D8D", "#8DD1E1", "#FF6699", "#8884D8", "#82ca9d",
+  ];
+
+  const semesterCounts = React.useMemo(() => {
+  const counts: Record<string, number> = {};
+  if (!dataGridProps.rows) return [];
+    dataGridProps.rows.forEach((subject) => {
+      const semesterKey = subject.semester.toString();
+      counts[semesterKey] = (counts[semesterKey] || 0) + 1;
+    });
+
+    return Object.entries(counts).map(([semester, count]) => ({
+      name: `Semester ${semester}`,
+      value: count,
+    }));
+  }, [dataGridProps.rows]);
 
   return (
     <List canCreate={false}>
@@ -136,6 +165,30 @@ export const SubjectReportsList = () => {
         getRowId={(row) => row.id}
         rows={filteredRows}
       />
+      <Box mb={4} height={300}>
+        <Typography variant="h6" mb={2}>
+          Subjects per Semester
+        </Typography>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={semesterCounts}
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              fill="#8884d8"
+              dataKey="value"
+              label
+            >
+              {semesterCounts.map((_, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </Box>
     </List>
   );
 };

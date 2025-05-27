@@ -11,16 +11,24 @@ import { useCustom } from "@refinedev/core";
 import { useParams } from "react-router-dom";
 import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
 import { ReportSubject } from "../../../interfaces/report_interface";
+import { Student } from "../../../interfaces/student_interface";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 
 export const StudentReportsShow = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading } = useCustom<ReportSubject>({
-      url: `reports/students/${id}/grades`,
-      method: "get"
+  const { data: gradesData, isLoading: isGradesLoading } = useCustom<ReportSubject>({
+    url: `reports/students/${id}/grades`,
+    method: "get",
   });
-  const rows = data?.data?.subjects ?? [];
+
+  const { data: studentData, isLoading: isStudentLoading } = useCustom<Student>({
+    url: `students/${id}`,
+    method: "get",
+  });
+
+  const isLoading = isGradesLoading || isStudentLoading;
+  const rows = gradesData?.data?.subjects ?? [];
 
   const columns: GridColDef[] = [
     {
@@ -60,7 +68,8 @@ export const StudentReportsShow = () => {
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`Grades_Student's_Full_Name.pdf`);
+    pdf.save(`${studentData?.data.id + "_" + 
+      studentData?.data.name + "_" + studentData?.data.lastname}_Grades.pdf`);
   };
 
   return (
@@ -79,21 +88,21 @@ export const StudentReportsShow = () => {
               <Typography variant="body1" fontWeight="bold">
                 Full Name
               </Typography>
-              <TextField value="Student's Name" />
+              <TextField value={studentData?.data.name + " " + studentData?.data.lastname} />
             </Box>
 
             <Box flex={1}>
               <Typography variant="body1" fontWeight="bold">
                 Semester
               </Typography>
-              <TextField value="Student's Semester" />
+              <TextField value={studentData?.data.semester} />
             </Box>
 
             <Box flex={1}>
               <Typography variant="body1" fontWeight="bold">
                 Student's Average
               </Typography>
-              <TextField value={data?.data?.average} />
+              <TextField value={gradesData?.data?.average} />
             </Box>
           </Box>
 
@@ -102,7 +111,6 @@ export const StudentReportsShow = () => {
               rows={rows}
               columns={columns}
               hideFooter
-              autoHeight
             />
           </Box>
         </Stack>

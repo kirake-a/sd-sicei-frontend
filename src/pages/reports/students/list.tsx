@@ -61,6 +61,13 @@ export const StudentReportsList = () => {
         display: "flex",
       },
       {
+        field: "semester",
+        flex: 1,
+        headerName: "Semester",
+        minWidth: 200,
+        display: "flex",
+      },
+      {
         field: "actions",
         headerName: "Actions",
         align: "right",
