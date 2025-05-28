@@ -2,11 +2,11 @@ import { Box, TextField } from "@mui/material";
 import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 
-import { Student } from "../../interfaces/student_interface";
+import { Student } from "../../../interfaces/student_interface";
 
 type FormValues = Omit<Student, "id">;
 
-export const StudentCreate = () => {
+export const StudentReportsCreate = () => {
 
   const {
     saveButtonProps,
@@ -15,7 +15,7 @@ export const StudentCreate = () => {
     refineCore: { formLoading },
   } = useForm<FormValues>({
     refineCoreProps: {
-      resource: "students",
+      resource: "grades-students",
       action: "create",
     },
   })
@@ -39,7 +39,6 @@ export const StudentCreate = () => {
           label="Name"
           name="name"
         />
-        
         <TextField
           {...register("lastname", { required: "This field is required" })}
           error={!!errors.lastname}
@@ -52,7 +51,6 @@ export const StudentCreate = () => {
           label="Lastname"
           name="lastname"
         />
-
         <TextField
           {...register("email", {
             required: "This field is required",
@@ -71,13 +69,8 @@ export const StudentCreate = () => {
           label="Email"
           name="email"
         />
-
         <TextField
-          {...register("semester", {
-            required: "This field is required",
-            min: { value: 1, message: "Semester must be at least 1" },
-            max: { value: 10, message: "Semester must be at most 10" },
-          })}
+          {...register("semester", { required: "This field is required" })}
           error={!!errors.semester}
           helperText={typeof errors.semester?.message === "string" ? errors.semester.message : ""}
           margin="normal"
@@ -86,7 +79,6 @@ export const StudentCreate = () => {
             inputLabel: { shrink: true },
           }}
           type="number"
-          inputProps={{ min: 1, max: 10 }}
           label="Semester"
           name="semester"
         />

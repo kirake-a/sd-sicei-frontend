@@ -2,11 +2,11 @@ import { Box, TextField } from "@mui/material";
 import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 
-import { Student } from "../../interfaces/student_interface";
+import { Subject } from "../../../interfaces/subject_interface";
 
-type FormValues = Omit<Student, "id">;
+type FormValues = Omit<Subject, "id">;
 
-export const StudentCreate = () => {
+export const SubjectGradesCreate = () => {
 
   const {
     saveButtonProps,
@@ -15,7 +15,7 @@ export const StudentCreate = () => {
     refineCore: { formLoading },
   } = useForm<FormValues>({
     refineCoreProps: {
-      resource: "students",
+      resource: "subjects",
       action: "create",
     },
   })
@@ -39,45 +39,31 @@ export const StudentCreate = () => {
           label="Name"
           name="name"
         />
-        
         <TextField
-          {...register("lastname", { required: "This field is required" })}
-          error={!!errors.lastname}
-          helperText={typeof errors.lastname?.message === "string" ? errors.lastname.message : ""}
+          {...register("description")}
           margin="normal"
           fullWidth
           slotProps={{
             inputLabel: { shrink: true },
           }}
-          label="Lastname"
-          name="lastname"
+          label="Description"
+          name="description"
         />
-
         <TextField
-          {...register("email", {
-            required: "This field is required",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Invalid email address",
-            },
-          })}
-          error={!!errors.email}
-          helperText={typeof errors.email?.message === "string" ? errors.email.message : ""}
+          {...register("credits", { required: "This field is required" })}
+          error={!!errors.credits}
+          helperText={typeof errors.credits?.message === "string" ? errors.credits.message : ""}
           margin="normal"
           fullWidth
           slotProps={{
             inputLabel: { shrink: true },
           }}
-          label="Email"
-          name="email"
+          type="number"
+          label="Credits"
+          name="credits"
         />
-
         <TextField
-          {...register("semester", {
-            required: "This field is required",
-            min: { value: 1, message: "Semester must be at least 1" },
-            max: { value: 10, message: "Semester must be at most 10" },
-          })}
+          {...register("semester", { required: "This field is required" })}
           error={!!errors.semester}
           helperText={typeof errors.semester?.message === "string" ? errors.semester.message : ""}
           margin="normal"
@@ -86,7 +72,6 @@ export const StudentCreate = () => {
             inputLabel: { shrink: true },
           }}
           type="number"
-          inputProps={{ min: 1, max: 10 }}
           label="Semester"
           name="semester"
         />

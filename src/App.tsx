@@ -1,37 +1,32 @@
-import { Refine } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
+import Logo from "../public/favicon.ico";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
+import { Refine } from "@refinedev/core";
+import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   ErrorComponent,
   RefineSnackbarProvider,
   ThemedLayoutV2,
   useNotificationProvider,
 } from "@refinedev/mui";
-
-import CssBaseline from "@mui/material/CssBaseline";
-import GlobalStyles from "@mui/material/GlobalStyles";
 import routerBindings, {
   DocumentTitleHandler,
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
-import dataProvider from "@refinedev/simple-rest";
+
+import { customDataProvider } from "./api/data-provider";
+import { resources } from "./utils/resources";
+
+import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
+
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
-import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "./pages/blog-posts";
-import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "./pages/categories";
+
+import { Header } from "./components/header";
+
 import {
   StudentCreate,
   StudentEdit,
@@ -39,7 +34,45 @@ import {
   StudentShow
 } from "./pages/students"
 
+import {
+  SubjectCreate,
+  SubjectEdit,
+  SubjectList,
+  SubjectShow
+} from "./pages/subjects"
+
+import {
+  StudentGradesCreate,
+  StudentGradesEdit,
+  StudentGradesList,
+  StudentGradesShow
+} from "./pages/grades/students"
+
+import {
+  SubjectGradesCreate,
+  SubjectGradesEdit,
+  SubjectGradesList,
+  SubjectGradesShow,
+} from "./pages/grades/subjects"
+
+import {
+  StudentReportsCreate,
+  StudentReportsEdit,
+  StudentReportsList,
+  StudentReportsShow
+} from "./pages/reports/students"
+
+import {
+  SubjectReportsCreate,
+  SubjectReportsEdit,
+  SubjectReportsList,
+  SubjectReportsShow,
+} from "./pages/reports/subjects"
+
+const StickyHeader = () => <Header sticky />;
+
 function App() {
+
   return (
     <BrowserRouter>
       <RefineKbarProvider>
@@ -47,43 +80,11 @@ function App() {
           <CssBaseline />
           <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
           <RefineSnackbarProvider>
-            <DevtoolsProvider>
               <Refine
-                dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
+                dataProvider={customDataProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                resources={[
-                  {
-                    name: "blog_posts",
-                    list: "/blog-posts",
-                    create: "/blog-posts/create",
-                    edit: "/blog-posts/edit/:id",
-                    show: "/blog-posts/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "students",
-                    list: "/students",
-                    create: "/students/create",
-                    edit: "/students/edit/:id",
-                    show: "/students/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                ]}
+                resources={resources}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -94,43 +95,84 @@ function App() {
                 <Routes>
                   <Route
                     element={
-                      <ThemedLayoutV2 Header={() => <Header sticky />}>
+                      <ThemedLayoutV2
+                        Header={StickyHeader}
+                        Title={() => (
+                          <Box display="flex" alignItems="center" gap={1}>
+                            <img src={Logo} alt="Logo" width={24} height={24} />
+                            <Typography fontWeight="bold" fontSize={16}>
+                              SICEI Project
+                            </Typography>
+                          </Box>
+                        )}
+                      >
                         <Outlet />
                       </ThemedLayoutV2>
                     }
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="blog_posts" />}
+                      element={<NavigateToResource resource="students" />}
                     />
-                    <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
-                      <Route path="show/:id" element={<BlogPostShow />} />
-                    </Route>
-                    <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
                     <Route path="/students">
                       <Route index element={<StudentList />} />
                       <Route path="create" element={<StudentCreate />} />
                       <Route path="edit/:id" element={<StudentEdit />} />
                       <Route path="show/:id" element={<StudentShow />} />
                     </Route>
+
+                    <Route path="/subjects">
+                      <Route index element={<SubjectList />} />
+                      <Route path="create" element={<SubjectCreate />} />
+                      <Route path="edit/:id" element={<SubjectEdit />} />
+                      <Route path="show/:id" element={<SubjectShow />} />
+                    </Route>
+
+                    <Route path="/grades/students">
+                      <Route index element={<StudentGradesList />} />
+                      <Route path="create" element={<StudentGradesCreate />} />
+                      <Route path="edit/:id" element={<StudentGradesEdit />} />
+                      <Route path="show/:id" element={<StudentGradesShow />} />
+                    </Route>
+
+                    <Route path="/grades/subjects">
+                      <Route index element={<SubjectGradesList />} />
+                      <Route path="create" element={<SubjectGradesCreate />} />
+                      <Route path="edit/:id" element={<SubjectGradesEdit />} />
+                      <Route path="show/:id" element={<SubjectGradesShow />} />
+                    </Route>
+
+                    <Route path="/reports/students">
+                      <Route index element={<StudentReportsList />} />
+                      <Route path="create" element={<StudentReportsCreate />} />
+                      <Route path="edit/:id" element={<StudentReportsEdit />} />
+                      <Route path="show/:id" element={<StudentReportsShow />} />
+                    </Route>
+
+                    <Route path="/reports/subjects">
+                      <Route index element={<SubjectReportsList />} />
+                      <Route path="create" element={<SubjectReportsCreate />} />
+                      <Route path="edit/:id" element={<SubjectReportsEdit />} />
+                      <Route path="show/:id" element={<SubjectReportsShow />} />
+                    </Route>
+
+                    <Route path="/grades/subjects">
+                      <Route index element={<SubjectGradesList />} />
+                      <Route path="create" element={<SubjectGradesCreate />} />
+                      <Route path="edit/:id" element={<SubjectGradesEdit />} />
+                      <Route path="show/:id" element={<SubjectGradesShow />} />
+                    </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
+                  
                 </Routes>
 
                 <RefineKbar />
                 <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
+                <DocumentTitleHandler
+                  handler={({ autoGeneratedTitle }) => `${autoGeneratedTitle.replace("Refine", "SICEI")}`}
+                />
               </Refine>
-              <DevtoolsPanel />
-            </DevtoolsProvider>
           </RefineSnackbarProvider>
         </ColorModeContextProvider>
       </RefineKbarProvider>

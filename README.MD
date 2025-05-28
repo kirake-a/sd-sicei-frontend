@@ -1,21 +1,18 @@
-# sicei
-
-<div align="center" style="margin: 30px;">
-    <a href="https://refine.dev">
-    <img alt="refine logo" src="https://refine.ams3.cdn.digitaloceanspaces.com/readme/refine-readme-banner.png">
-    </a>
-</div>
-<br/>
-
-This [Refine](https://github.com/refinedev/refine) project was generated with [create refine-app](https://github.com/refinedev/refine/tree/master/packages/create-refine-app).
+# SICEI
 
 ## Getting Started
 
-A React Framework for building internal tools, admin panels, dashboards & B2B apps with unmatched flexibility ✨
+B2B for managing students, subjects, and their grades. Integration of reports for students and subjects.
 
-Refine's hooks and components simplifies the development process and eliminates the repetitive tasks by providing industry-standard solutions for crucial aspects of a project, including authentication, access control, routing, networking, state management, and i18n.
+The Refine React framework has been used with the TypeScript programming language.
 
 ## Available Scripts
+
+### Initial installation of dependencies
+
+```bash
+    npm install
+```
 
 ### Running the development server.
 

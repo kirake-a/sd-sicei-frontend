@@ -1,19 +1,15 @@
-import { Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
-  DeleteButton,
-  EditButton,
   List,
   ShowButton,
   useDataGrid,
 } from "@refinedev/mui";
 import React from "react";
 
-import { Student } from "../../interfaces/student_interface";
+import { Subject } from "../../../interfaces/subject_interface";
 
-export const StudentList = () => {
-
-  const { dataGridProps } = useDataGrid<Student>();
+export const SubjectGradesList = () => {
+  const { dataGridProps } = useDataGrid<Subject>();
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -34,30 +30,38 @@ export const StudentList = () => {
         display: "flex",
       },
       {
-        field: "lastname",
+        field: "description",
         flex: 1,
-        headerName: "Lastname",
+        headerName: "Description",
+        minWidth: 200,
+        renderCell: (params) => (
+          <span
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "block",
+              maxWidth: "100%",
+            }}
+            title={params.value}
+          >
+            {params.value}
+          </span>
+        ),
+      },      
+      {
+        field: "credits",
+        flex: 1,
+        headerName: "Credits",
         minWidth: 200,
         display: "flex",
       },
       {
-        field: "email",
+        field: "semester",
         flex: 1,
-        headerName: "Email",
+        headerName: "Semester",
         minWidth: 200,
         display: "flex",
-        renderCell: function render({ value }) {
-          return (
-            <Typography
-              component="p"
-              whiteSpace="pre"
-              overflow="hidden"
-              textOverflow="ellipsis"
-            >
-              {value ?? "-"}
-            </Typography>
-          )
-        }
       },
       {
         field: "actions",
@@ -69,15 +73,7 @@ export const StudentList = () => {
         display: "flex",
         renderCell: function render({ row }) {
           return (
-            <>
-              <EditButton hideText recordItemId={row.id} />
-              <ShowButton hideText recordItemId={row.id} />
-              <DeleteButton
-                hideText
-                recordItemId={row.id}
-                confirmTitle={`Are you sure you want to delete the student: ${row.name} ${row.lastname}?`}
-              />
-            </>
+            <ShowButton hideText recordItemId={row.id} />
           );
         },
       },
@@ -86,7 +82,7 @@ export const StudentList = () => {
   );
 
   return (
-    <List>
+    <List canCreate={false}>
       <DataGrid
         {...dataGridProps}
         columns={columns}

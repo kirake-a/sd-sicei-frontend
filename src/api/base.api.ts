@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_SICEI_API_ORIGIN;
 
-export const api_instance = axios.create({
+export const apiInstance = axios.create({
     baseURL: BASE_URL
 });

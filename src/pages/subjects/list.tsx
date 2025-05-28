@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
   DeleteButton,
@@ -9,11 +8,10 @@ import {
 } from "@refinedev/mui";
 import React from "react";
 
-import { Student } from "../../interfaces/student_interface";
+import { Subject } from "../../interfaces/subject_interface";
 
-export const StudentList = () => {
-
-  const { dataGridProps } = useDataGrid<Student>();
+export const SubjectList = () => {
+  const { dataGridProps } = useDataGrid<Subject>();
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -21,6 +19,7 @@ export const StudentList = () => {
         field: "id",
         headerName: "ID",
         type: "number",
+        flex: 1,
         minWidth: 50,
         display: "flex",
         align: "left",
@@ -34,30 +33,38 @@ export const StudentList = () => {
         display: "flex",
       },
       {
-        field: "lastname",
+        field: "description",
         flex: 1,
-        headerName: "Lastname",
+        headerName: "Description",
+        minWidth: 200,
+        renderCell: (params) => (
+          <span
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "block",
+              maxWidth: "100%",
+            }}
+            title={params.value}
+          >
+            {params.value}
+          </span>
+        ),
+      },      
+      {
+        field: "credits",
+        flex: 1,
+        headerName: "Credits",
         minWidth: 200,
         display: "flex",
       },
       {
-        field: "email",
+        field: "semester",
         flex: 1,
-        headerName: "Email",
+        headerName: "Semester",
         minWidth: 200,
         display: "flex",
-        renderCell: function render({ value }) {
-          return (
-            <Typography
-              component="p"
-              whiteSpace="pre"
-              overflow="hidden"
-              textOverflow="ellipsis"
-            >
-              {value ?? "-"}
-            </Typography>
-          )
-        }
       },
       {
         field: "actions",
@@ -75,7 +82,7 @@ export const StudentList = () => {
               <DeleteButton
                 hideText
                 recordItemId={row.id}
-                confirmTitle={`Are you sure you want to delete the student: ${row.name} ${row.lastname}?`}
+                confirmTitle={`Are you sure you want to delete the subject: ${row.name}?`}
               />
             </>
           );
